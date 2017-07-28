@@ -4,6 +4,12 @@ import MessageList from './MessageList.jsx';
 
 const ws = new WebSocket('ws://0.0.0.0:3001');
 
+function randomColor() {
+  const colorOptions = ["#FF0000", "#1A55F4", "#3AC61A", "#19E8D2"];
+  const colorChoice = colorOptions[Math.floor(Math.random() * colorOptions.length)];
+  return colorChoice;
+}
+
 export default class App extends Component {
 
   constructor(props) {
@@ -12,7 +18,8 @@ export default class App extends Component {
       currentUser: {},
       userNotification: "",
       messages: [],
-      usersAmount : 0,
+      usersAmount: 0,
+      userColor: randomColor(),
     };
     
     this.newPost = this.newPost.bind(this);
@@ -83,7 +90,7 @@ export default class App extends Component {
           <a href="/" className="navbar-brand">Chatty</a>
           <span className="userAmount">{this.state.usersAmount} users online</span>
         </nav>
-        <MessageList messages={this.state.messages} userNotification={this.state.userNotification} />
+        <MessageList messages={this.state.messages} userNotification={this.state.userNotification} userColor={this.state.userColor} />
         <ChatBar currentUser={this.state.currentUser} newPost={this.newPost} newUser={this.newUser} />
 
       </div>

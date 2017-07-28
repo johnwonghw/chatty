@@ -5,7 +5,7 @@ class Message extends Component {
         console.log ("Rendering <Message/>", this)
         const messageList = this.props.messages.map((message) => {
           return (<div key={message.id} className="message">
-            <span className="message-username">{message.username}</span>
+            <span className="message-username" style={{color: this.props.userColor}} >{message.username}</span>
             <span className="message-content">{message.content}</span>
           </div>);
         })

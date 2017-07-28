@@ -6,7 +6,7 @@ class MessageList extends Component {
         console.log ("Rendering <MessageList/>")
         return (
             <div className="message-List">
-                <Message messages={this.props.messages} userNotification={this.props.userNotification} />
+                <Message messages={this.props.messages} userNotification={this.props.userNotification} userColor={this.props.userColor} />
             </div>
         );
     }
