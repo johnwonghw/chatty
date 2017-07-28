@@ -11,7 +11,8 @@ export default class App extends Component {
     this.state = {
       currentUser: {},
       userNotification: "",
-      messages: []
+      messages: [],
+      usersAmount : 0,
     };
     
     this.newPost = this.newPost.bind(this);
@@ -29,6 +30,9 @@ export default class App extends Component {
 
   newPost(post) {
     // Why is this.state undefined here, but defined in componentDidMount?
+    if (!this.state.currentUser.name) {
+      this.state.currentUser.name = "Anonymous"
+    }
     const message = {
       type: "postMessage",
       username: this.state.currentUser.name,
@@ -59,6 +63,10 @@ export default class App extends Component {
           this.setState({messages: broadcastedMessage})
           console.log(messageData)
             break;
+        case "incomingUserSize":
+          console.log(messageData.currentUserCount)
+          this.setState({usersAmount: messageData.currentUserCount})
+            break;
         default:
             console.log("Error")
       }
@@ -73,6 +81,7 @@ export default class App extends Component {
       <div>
         <nav className="navbar">
           <a href="/" className="navbar-brand">Chatty</a>
+          <span className="userAmount">{this.state.usersAmount} users online</span>
         </nav>
         <MessageList messages={this.state.messages} userNotification={this.state.userNotification} />
         <ChatBar currentUser={this.state.currentUser} newPost={this.newPost} newUser={this.newUser} />
