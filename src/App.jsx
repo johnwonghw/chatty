@@ -4,6 +4,7 @@ import MessageList from './MessageList.jsx';
 
 const ws = new WebSocket('ws://0.0.0.0:3001');
 
+//chooses a random color from an array and returns color as string. Changes the color of the user's username
 function randomColor() {
   const colorOptions = ["#FF0000", "#1A55F4", "#3AC61A", "#19E8D2"];
   const colorChoice = colorOptions[Math.floor(Math.random() * colorOptions.length)];
@@ -36,7 +37,7 @@ export default class App extends Component {
   }
 
   newPost(post) {
-    // Why is this.state undefined here, but defined in componentDidMount?
+    //Defaults usernames to Anonymous until changed in the Chatbar
     if (!this.state.currentUser.name) {
       this.state.currentUser.name = "Anonymous"
     }
@@ -45,24 +46,24 @@ export default class App extends Component {
       username: this.state.currentUser.name,
       content: post,
     };
-    // const newMessages = this.state.messages.concat(message);
     ws.send(JSON.stringify(message))
-    // this.setState({messages: newMessages})
   }
 
   componentDidMount() {
-    console.log("componentDidMount <App />");  
 
     ws.onopen = () => {
-      console.log('Connected to Server');
+    console.log('Connected to Server');
     };
+  
     ws.onmessage = (event) => {
-      const messageData = JSON.parse(event.data);
-      
+    const messageData = JSON.parse(event.data);
+    
       switch (messageData.type) {
+        //Notifies users when users change their username
         case "incomingNotification":
         this.setState({userNotification: messageData.content})
           break;
+        //Updates messagelist users type in the Chat Bar
         case "incomingMessage":
           const message ={username: messageData.username,
                           content: messageData.content,}
@@ -70,6 +71,7 @@ export default class App extends Component {
           this.setState({messages: broadcastedMessage})
           console.log(messageData)
             break;
+        //Updates the amount of clients connected to server
         case "incomingUserSize":
           console.log(messageData.currentUserCount)
           this.setState({usersAmount: messageData.currentUserCount})
@@ -77,13 +79,10 @@ export default class App extends Component {
         default:
             console.log("Error")
       }
-
-
     }  
-  }
+}
 
   render() {
-    console.log("Rendering <App/> ")
     return (
       <div>
         <nav className="navbar">
@@ -92,7 +91,6 @@ export default class App extends Component {
         </nav>
         <MessageList messages={this.state.messages} userNotification={this.state.userNotification} userColor={this.state.userColor} />
         <ChatBar currentUser={this.state.currentUser} newPost={this.newPost} newUser={this.newUser} />
-
       </div>
     );
   }

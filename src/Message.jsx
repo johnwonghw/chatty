@@ -2,7 +2,6 @@ import React, {Component} from 'react';
 
 class Message extends Component {
     render() {
-        console.log ("Rendering <Message/>", this)
         const messageList = this.props.messages.map((message) => {
           return (<div key={message.id} className="message">
             <span className="message-username" style={{color: this.props.userColor}} >{message.username}</span>
